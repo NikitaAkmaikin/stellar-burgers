@@ -1,29 +1,48 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getOrdersApi } from '@api';
+import { orderBurgerApi } from '@api';
 
-export const getOrders = createAsyncThunk('orders/getUsers', async () => {
-  const response = await getOrdersApi();
-  return response;
-});
+export const newBurgerOrder = createAsyncThunk(
+  'order/new',
+  async (data: string[]) => {
+    const response = await orderBurgerApi(data);
+    return response;
+  }
+);
 
-type TOrders = {
-  orders: TOrder[];
+type TNewOrderState = {
+  order: TOrder | null;
+  name: string;
+  orderRequest: boolean;
 };
 
-const initialState: TOrders = {
-  orders: []
+const initialState: TNewOrderState = {
+  order: null,
+  name: '',
+  orderRequest: false
 };
 
-const ordersSlice = createSlice({
-  name: 'orders',
+const newOrderSlice = createSlice({
+  name: 'newOrder',
   initialState,
-  reducers: {},
+  reducers: {
+    clearOrder: (state) => (state = initialState)
+  },
   extraReducers: (builder) => {
-    builder.addCase(getOrders.fulfilled, (state, action) => {
-      state.orders = action.payload;
-    });
+    builder
+      .addCase(newBurgerOrder.pending, (state) => {
+        state.orderRequest = true;
+      })
+      .addCase(newBurgerOrder.rejected, (state, action) => {
+        state.orderRequest = false;
+      })
+      .addCase(newBurgerOrder.fulfilled, (state, action) => {
+        state.orderRequest = false;
+        state.order = action.payload.order;
+        state.name = action.payload.name;
+      });
   }
 });
 
-export const ordersReducer = ordersSlice.reducer;
+export const newOrderReducer = newOrderSlice.reducer;
+export const { clearOrder } = newOrderSlice.actions;

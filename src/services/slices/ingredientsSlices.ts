@@ -2,29 +2,22 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '../../utils/types';
 import { getIngredientsApi } from '@api';
 
-export const getIngredients = createAsyncThunk(
+export const getApiIngredients = createAsyncThunk(
   'ingredients/getAll',
   async () => {
     const response = await getIngredientsApi();
-    console.log(response);
     return response;
   }
 );
 
 type TIngredientsState = {
   ingredients: TIngredient[];
-  buns: TIngredient[];
-  mains: TIngredient[];
-  sauces: TIngredient[];
   loading: boolean;
   error: string | null;
 };
 
 const initialState: TIngredientsState = {
   ingredients: [],
-  buns: [],
-  mains: [],
-  sauces: [],
   loading: false,
   error: null
 };
@@ -34,15 +27,22 @@ const ingredientsSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getIngredientsSelector: (state) => state
+    getIngredientsLoading: (state) => state.loading,
+    getIngredients: (state) => state.ingredients,
+    getIngredientsBuns: (state) =>
+      state.ingredients.filter((ingredient) => ingredient.type === 'bun'),
+    getIngredientsMains: (state) =>
+      state.ingredients.filter((ingredient) => ingredient.type === 'main'),
+    getIngredientsSauces: (state) =>
+      state.ingredients.filter((ingredient) => ingredient.type === 'sauce')
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getIngredients.pending, (state) => {
+      .addCase(getApiIngredients.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getIngredients.rejected, (state, action) => {
+      .addCase(getApiIngredients.rejected, (state, action) => {
         state.loading = false;
         if (action.error.message) {
           state.error = action.error.message;
@@ -50,17 +50,19 @@ const ingredientsSlice = createSlice({
           state.error = null;
         }
       })
-      .addCase(getIngredients.fulfilled, (state, action) => {
+      .addCase(getApiIngredients.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload) {
-          state.ingredients = action.payload;
-          state.buns = action.payload.filter((ing) => ing.type === 'bun');
-          state.mains = action.payload.filter((ing) => ing.type === 'main');
-          state.sauces = action.payload.filter((ing) => ing.type === 'sauce');
-        }
+        state.ingredients = action.payload;
       });
   }
 });
 
 export const ingredientsReducer = ingredientsSlice.reducer;
-export const { getIngredientsSelector } = ingredientsSlice.selectors;
+
+export const {
+  getIngredientsLoading,
+  getIngredients,
+  getIngredientsBuns,
+  getIngredientsMains,
+  getIngredientsSauces
+} = ingredientsSlice.selectors;

@@ -1,0 +1,57 @@
+import { createSlice } from '@reduxjs/toolkit';
+import { TConstructorIngredient } from '../../utils/types';
+
+type TBurgerState = {
+  constructorItems: {
+    bun: TConstructorIngredient | null;
+    ingredients: TConstructorIngredient[];
+  };
+};
+
+const initialState: TBurgerState = {
+  constructorItems: {
+    bun: null,
+    ingredients: []
+  }
+};
+
+const burgerSlice = createSlice({
+  name: 'burgerConstructor',
+  initialState,
+  reducers: {
+    addBurger: (state, action) => {
+      if (action.payload.type === 'bun') {
+        state.constructorItems.bun = action.payload;
+      } else {
+        console.log(action.payload);
+        state.constructorItems.ingredients.push(action.payload);
+      }
+    },
+    removeBurger: (state, action) => {
+      const { id } = action.payload;
+      state.constructorItems.ingredients =
+        state.constructorItems.ingredients.filter(
+          (el) => el.id !== action.payload
+        );
+    },
+    handleBurgerPosition: (state, action) => {
+      const { index, step } = action.payload;
+      [
+        state.constructorItems.ingredients[index],
+        state.constructorItems.ingredients[index + step]
+      ] = [
+        state.constructorItems.ingredients[index + step],
+        state.constructorItems.ingredients[index]
+      ];
+    },
+    clearBurger: (state) => (state = initialState)
+  },
+  selectors: {
+    getBurgerSelector: (state) => state
+  }
+});
+
+export const burgerReducer = burgerSlice.reducer;
+export const { getBurgerSelector } = burgerSlice.selectors;
+export const { addBurger, removeBurger, clearBurger, handleBurgerPosition } =
+  burgerSlice.actions;
