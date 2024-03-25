@@ -1,7 +1,7 @@
 import '../../index.css';
 import styles from './app.module.css';
 import { ProtectedRoute } from '../protectedRoute/ProtectedRoute';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import {
   ConstructorPage,
@@ -18,6 +18,7 @@ import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { getApiIngredients } from '../../services/slices/ingredientsSlices';
 const App = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -83,12 +84,7 @@ const App = () => {
         <Route
           path='/feed/:number'
           element={
-            <Modal
-              title={''}
-              onClose={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-            >
+            <Modal title={''} onClose={() => navigate(-1)}>
               <OrderInfo />
             </Modal>
           }
@@ -96,12 +92,7 @@ const App = () => {
         <Route
           path='/ingredients/:id'
           element={
-            <Modal
-              title={''}
-              onClose={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-            >
+            <Modal title={''} onClose={() => navigate(-1)}>
               <IngredientDetails />
             </Modal>
           }
@@ -109,12 +100,7 @@ const App = () => {
         <Route
           path='/profile/orders/:number'
           element={
-            <Modal
-              title={''}
-              onClose={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-            >
+            <Modal title={''} onClose={() => navigate(-1)}>
               <ProtectedRoute>
                 <OrderInfo />
               </ProtectedRoute>

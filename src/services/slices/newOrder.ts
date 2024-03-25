@@ -11,13 +11,13 @@ export const newBurgerOrder = createAsyncThunk(
 );
 
 type TNewOrderState = {
-  order: TOrder | null;
+  orderModalData: TOrder | null;
   name: string;
   orderRequest: boolean;
 };
 
 const initialState: TNewOrderState = {
-  order: null,
+  orderModalData: null,
   name: '',
   orderRequest: false
 };
@@ -38,7 +38,7 @@ const newOrderSlice = createSlice({
       })
       .addCase(newBurgerOrder.fulfilled, (state, action) => {
         state.orderRequest = false;
-        state.order = action.payload.order;
+        state.orderModalData = action.payload.order;
         state.name = action.payload.name;
       });
   }
