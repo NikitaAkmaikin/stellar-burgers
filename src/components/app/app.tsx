@@ -1,7 +1,7 @@
 import '../../index.css';
 import styles from './app.module.css';
 import { ProtectedRoute } from '../protectedRoute/ProtectedRoute';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import {
   ConstructorPage,
@@ -17,7 +17,6 @@ import {
 const App = () => (
   <div className={styles.app}>
     <AppHeader />
-    <ConstructorPage />
     <Routes>
       <Route path='/' element={<ConstructorPage />} />
       <Route path='/feed' element={<Feed />} />
