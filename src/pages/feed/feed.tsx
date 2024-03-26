@@ -3,7 +3,7 @@ import { FeedUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
 import { FC } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getFeeds, getOrdersFeeds } from '../../services/slices/feedsSlices';
+import { getApiFeeds, getOrdersFeeds } from '../../services/slices/feedsSlices';
 
 export const Feed: FC = () => {
   /** TODO: взять переменную из стора */
@@ -14,5 +14,5 @@ export const Feed: FC = () => {
     return <Preloader />;
   }
 
-  <FeedUI orders={orders} handleGetFeeds={() => dispatch(getFeeds())} />;
+  <FeedUI orders={orders} handleGetFeeds={() => dispatch(getApiFeeds())} />;
 };

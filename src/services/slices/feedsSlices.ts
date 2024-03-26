@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getFeedsApi } from '@api';
 
-export const getFeeds = createAsyncThunk('order/getAll', async () => {
+export const getApiFeeds = createAsyncThunk('order/getAll', async () => {
   const response = await getFeedsApi();
   return response;
 });
@@ -29,7 +29,7 @@ const feedsSlice = createSlice({
     getTotalTodayFeeds: (state) => state.totalToday
   },
   extraReducers: (builder) => {
-    builder.addCase(getFeeds.fulfilled, (state, action) => {
+    builder.addCase(getApiFeeds.fulfilled, (state, action) => {
       state.total = action.payload.total;
       state.orders = action.payload.orders;
       state.totalToday = action.payload.totalToday;

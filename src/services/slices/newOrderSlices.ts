@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { orderBurgerApi } from '@api';
 
-export const newBurgerOrder = createAsyncThunk(
+export const getApiBurgerOrder = createAsyncThunk(
   'order/new',
   async (data: string[]) => {
     const response = await orderBurgerApi(data);
@@ -28,15 +28,20 @@ const newOrderSlice = createSlice({
   reducers: {
     clearOrder: (state) => (state = initialState)
   },
+  selectors: {
+    getOrderModalDataNewOrder: (state) => state.orderModalData,
+    getNameNewOrder: (state) => state.name,
+    getOrderRequestNewOrder: (state) => state.orderRequest
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(newBurgerOrder.pending, (state) => {
+      .addCase(getApiBurgerOrder.pending, (state) => {
         state.orderRequest = true;
       })
-      .addCase(newBurgerOrder.rejected, (state, action) => {
+      .addCase(getApiBurgerOrder.rejected, (state, action) => {
         state.orderRequest = false;
       })
-      .addCase(newBurgerOrder.fulfilled, (state, action) => {
+      .addCase(getApiBurgerOrder.fulfilled, (state, action) => {
         state.orderRequest = false;
         state.orderModalData = action.payload.order;
         state.name = action.payload.name;
@@ -46,3 +51,9 @@ const newOrderSlice = createSlice({
 
 export const newOrderReducer = newOrderSlice.reducer;
 export const { clearOrder } = newOrderSlice.actions;
+
+export const {
+  getOrderModalDataNewOrder,
+  getNameNewOrder,
+  getOrderRequestNewOrder
+} = newOrderSlice.selectors;

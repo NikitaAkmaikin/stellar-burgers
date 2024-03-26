@@ -47,13 +47,10 @@ const burgerSlice = createSlice({
       ];
     },
     clearBurger: (state) => (state = initialState)
-  },
-  selectors: {
-    getBurgerSelector: (state) => state
   }
 });
 
 export const burgerReducer = burgerSlice.reducer;
-export const { getBurgerSelector } = burgerSlice.selectors;
+
 export const { addBurger, removeBurger, clearBurger, handleBurgerPosition } =
   burgerSlice.actions;
