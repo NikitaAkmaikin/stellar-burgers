@@ -10,6 +10,7 @@ import {
 } from '../../services/slices/newOrderSlices';
 import { useNavigate } from 'react-router-dom';
 import { clearBurger } from '../../services/slices/burgerSlices';
+import { getIsAuthCheckedUser } from '../../services/slices/userSlices';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
@@ -19,9 +20,12 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector(getOrderRequestNewOrder);
   const orderModalData = useSelector(getOrderModalDataNewOrder);
   let dataNewOrder: string[] = [];
+  const userIsAuth = useSelector(getIsAuthCheckedUser);
 
   const onOrderClick = () => {
-    if (constructorItems.bun && constructorItems.ingredients) {
+    if (!userIsAuth) {
+      navigate('/login');
+    } else if (constructorItems.bun && constructorItems.ingredients) {
       dispatch(getApiBurgerOrder(dataNewOrder));
     }
   };

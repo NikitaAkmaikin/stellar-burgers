@@ -1,6 +1,6 @@
 import '../../index.css';
 import styles from './app.module.css';
-import { ProtectedRoute } from '../protectedRoute/ProtectedRoute';
+import { ProtectedRoute } from '../protectedRoute/protectedRoute';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import {
@@ -17,12 +17,14 @@ import {
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { getApiIngredients } from '../../services/slices/ingredientsSlices';
+import { getApiUser } from '../../services/slices/userSlices';
 const App = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getApiIngredients());
+    dispatch(getApiUser());
   }, []);
 
   return (
@@ -34,7 +36,7 @@ const App = () => {
         <Route
           path='/login'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Login />
             </ProtectedRoute>
           }
@@ -42,7 +44,7 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Register />
             </ProtectedRoute>
           }
@@ -50,7 +52,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -58,7 +60,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ResetPassword />
             </ProtectedRoute>
           }

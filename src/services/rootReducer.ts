@@ -4,11 +4,13 @@ import { burgerReducer } from './slices/burgerSlices';
 import { newOrderReducer } from './slices/newOrderSlices';
 import { feedsReducer } from './slices/feedsSlices';
 import { ordersReducer } from './slices/orderSlices';
+import { userReducer } from './slices/userSlices';
 
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   burger: burgerReducer,
-  newOrder: newOrderReducer,
   feeds: feedsReducer,
-  order: ordersReducer
+  newOrder: newOrderReducer,
+  orders: ordersReducer,
+  user: userReducer
 });

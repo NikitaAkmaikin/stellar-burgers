@@ -2,13 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { orderBurgerApi } from '@api';
 
-export const getApiBurgerOrder = createAsyncThunk(
-  'order/new',
-  async (data: string[]) => {
-    const response = await orderBurgerApi(data);
-    return response;
-  }
-);
+export const getApiBurgerOrder = createAsyncThunk('order/new', orderBurgerApi);
 
 type TNewOrderState = {
   orderModalData: TOrder | null;
