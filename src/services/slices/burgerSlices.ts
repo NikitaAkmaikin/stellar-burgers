@@ -23,16 +23,18 @@ const burgerSlice = createSlice({
       if (action.payload.type === 'bun') {
         state.constructorItems.bun = action.payload;
       } else {
-        console.log(action.payload);
         state.constructorItems.ingredients.push(action.payload);
       }
     },
     removeBurger: (state, action) => {
-      const { id } = action.payload;
-      state.constructorItems.ingredients =
-        state.constructorItems.ingredients.filter(
-          (el) => el.id !== action.payload
-        );
+      const { index } = action.payload;
+      state.constructorItems.ingredients.splice(index, 1);
+
+      // Вторая реализация удаления
+      // state.constructorItems.ingredients =
+      //   state.constructorItems.ingredients.filter(
+      //     (el) => el.id !== action.payload
+      //   );
     },
     handleBurgerPosition: (state, action) => {
       const { index, step } = action.payload;

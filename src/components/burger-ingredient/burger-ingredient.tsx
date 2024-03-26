@@ -10,7 +10,6 @@ import { v4 as uuidv4 } from 'uuid';
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
     const location = useLocation();
-
     const dispatch = useDispatch();
 
     const handleAdd = () => {

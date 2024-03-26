@@ -1,9 +1,8 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-// import { getConstructorBurger } from '../../services/slices/burgerSlices';
 import { useDispatch, useSelector } from '../../services/store';
-import { clearOrder } from '../../services/slices/newOrder';
+import { clearOrder } from '../../services/slices/newOrderSlices';
 import { useNavigate } from 'react-router-dom';
 import { clearBurger } from '../../services/slices/burgerSlices';
 
