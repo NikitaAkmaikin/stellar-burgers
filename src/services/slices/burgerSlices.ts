@@ -23,7 +23,7 @@ const burgerSlice = createSlice({
       if (action.payload.type === 'bun') {
         state.constructorItems.bun = action.payload;
       } else {
-        state.constructorItems.ingredients.push(action.payload);
+        state.constructorItems.ingredients.push({ ...action.payload });
       }
     },
     removeBurger: (state, action) => {

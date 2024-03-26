@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrdersApi } from '@api';
 
-export const getApiOrders = createAsyncThunk('orders/userOrders', getOrdersApi);
+export const getApiOrders = createAsyncThunk('orders/UserOrders', getOrdersApi);
 
 type TOrders = {
   orders: TOrder[];
