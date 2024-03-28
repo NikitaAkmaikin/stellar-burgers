@@ -19,17 +19,11 @@ export const OrderInfo: FC = () => {
     ingredients: ['']
   });
 
-  const id = useParams().number;
+  const id = Number(useParams().number);
   const ingredients = useSelector(getIngredients);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
-    useEffect(() => {
-      getOrderByNumberApi(Number(id)).then((data) => {
-        setOrderData(data.orders[0]);
-      });
-    }, []);
-
     if (!orderData || !ingredients.length) return null;
 
     const date = new Date(orderData.createdAt);
@@ -57,18 +51,22 @@ export const OrderInfo: FC = () => {
       {}
     );
 
-    const total = Object.values(ingredientsInfo).reduce(
-      (acc, item) => acc + item.price * item.count,
-      0
-    );
-
     return {
       ...orderData,
       ingredientsInfo,
       date,
-      total
+      total: Object.values(ingredientsInfo).reduce(
+        (acc, item) => acc + item.price * item.count,
+        0
+      )
     };
   }, [orderData, ingredients]);
+
+  useEffect(() => {
+    getOrderByNumberApi(id).then((data) => {
+      setOrderData(data.orders[0]);
+    });
+  }, [id]);
 
   if (!orderInfo) {
     return <Preloader />;
