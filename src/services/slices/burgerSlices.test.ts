@@ -9,34 +9,34 @@ import {
 
 const initialIngredients = [
   {
-    calories: 2674,
-    carbohydrates: 300,
-    fat: 800,
-    id: 'testID_1',
-    image: 'https://code.s3.yandex.net/react/code/meat-04.png',
-    image_large: 'https://code.s3.yandex.net/react/code/meat-04-large.png',
-    image_mobile: 'https://code.s3.yandex.net/react/code/meat-04-mobile.png',
-    name: 'Говяжий метеорит (отбивная)',
-    price: 3000,
-    proteins: 800,
+    calories: 1,
+    carbohydrates: 1,
+    fat: 1,
+    id: 'test1',
+    image: '1',
+    image_large: '1',
+    image_mobile: '1',
+    name: '1',
+    price: 1,
+    proteins: 1,
     type: 'main',
-    __v: 0,
-    _id: '643d69a5c3f7b9001cfa0940'
+    __v: 1,
+    _id: '1'
   },
   {
-    calories: 100,
-    carbohydrates: 100,
-    fat: 99,
-    id: 'testID_2',
-    image: 'https://code.s3.yandex.net/react/code/sauce-01.png',
-    image_large: 'https://code.s3.yandex.net/react/code/sauce-01-large.png',
-    image_mobile: 'https://code.s3.yandex.net/react/code/sauce-01-mobile.png',
-    name: 'Соус с шипами Антарианского плоскоходца',
-    price: 88,
-    proteins: 101,
+    calories: 2,
+    carbohydrates: 2,
+    fat: 2,
+    id: 'test2',
+    image: '2',
+    image_large: '2',
+    image_mobile: '2',
+    name: '2',
+    price: 2,
+    proteins: 2,
     type: 'sauce',
-    __v: 0,
-    _id: '643d69a5c3f7b9001cfa0945'
+    __v: 2,
+    _id: '2'
   }
 ];
 
@@ -58,14 +58,14 @@ const newIngredient = {
 
 describe('Проверяют редьюсер слайса burgerSlices', () => {
 
-  const mockConstructorState = {
+  const storeBurger = {
     ...initialState,
     ingredients: initialIngredients
   };
 
   test('обработка экшена добавления ингредиента', () => {
     const newState = burgerReducer(
-      mockConstructorState,
+      storeBurger,
       addBurger(newIngredient)
     );
 
@@ -76,7 +76,7 @@ describe('Проверяют редьюсер слайса burgerSlices', () => 
 
   test('обработка экшена удаления ингредиента', () => {
     const newState = burgerReducer(
-      mockConstructorState,
+      storeBurger,
       removeBurger({index: 1})
     );
 
@@ -87,7 +87,7 @@ describe('Проверяют редьюсер слайса burgerSlices', () => 
 
   test('обработка экшена изменения порядка ингредиентов в начинке', () => {
     let newState = burgerReducer(
-      mockConstructorState,
+      storeBurger,
       handleBurgerPosition({ index: 1, step: -1 })
     );
     const { ingredients } = newState;
