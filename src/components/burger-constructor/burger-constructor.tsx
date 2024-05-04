@@ -14,7 +14,12 @@ import { getIsAuthCheckedUser } from '../../services/slices/userSlices';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const { constructorItems } = useSelector((state) => state.burger);
+  const { bun, ingredients } = useSelector((state) => state.burger);
+
+  const constructorItems = {
+    bun,
+    ingredients
+  };
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const orderRequest = useSelector(getOrderRequestNewOrder);
