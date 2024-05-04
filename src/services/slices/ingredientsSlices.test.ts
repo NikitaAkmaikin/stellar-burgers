@@ -34,6 +34,7 @@ describe('Проверяют редьюсер слайса ingredientsSlices', (
       image_large: '2'
     }
   ];
+  
   test('тест экшена начала запроса "pending"', () => {
     const pending = {
       ...initialState,
