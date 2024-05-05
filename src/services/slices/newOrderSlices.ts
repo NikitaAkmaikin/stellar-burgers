@@ -5,13 +5,13 @@ import { orderBurgerApi } from '../../utils/burger-api';
 export const getApiBurgerOrder = createAsyncThunk('order/new', orderBurgerApi);
 
 type TNewOrderState = {
-  orderModalData: TOrder | null;
+  order: TOrder | null;
   name: string;
   orderRequest: boolean;
 };
 
 export const initialState: TNewOrderState = {
-  orderModalData: null,
+  order: null,
   name: '',
   orderRequest: false
 };
@@ -23,7 +23,7 @@ const newOrderSlice = createSlice({
     clearOrder: (state) => (state = initialState)
   },
   selectors: {
-    getOrderModalDataNewOrder: (state) => state.orderModalData,
+    getOrderModalDataNewOrder: (state) => state.order,
     getNameNewOrder: (state) => state.name,
     getOrderRequestNewOrder: (state) => state.orderRequest
   },
@@ -37,7 +37,7 @@ const newOrderSlice = createSlice({
       })
       .addCase(getApiBurgerOrder.fulfilled, (state, action) => {
         state.orderRequest = false;
-        state.orderModalData = action.payload.order;
+        state.order = action.payload.order;
         state.name = action.payload.name;
       });
   }
