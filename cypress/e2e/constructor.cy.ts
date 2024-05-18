@@ -4,8 +4,28 @@ describe('проверяем функциональность приложени
   });
 
   beforeEach(() => {
-    cy.viewport(1440, 1000);
+    cy.viewport(1300, 800);
+    // моковые данные ответа на запрос создания заказа
+    cy.intercept('GET', 'api/ingredients', {
+      fixture: 'ingredients.json'
+    }).as(`${'ingredients'}`);
+    // моковые токены авторизации
+    cy.intercept('GET', 'api/auth/user', {
+      fixture: 'user.json'
+    }).as(`${'user'}`);
+    cy.setCookie('accessToken', 'mockAccessToken');
+    window.localStorage.setItem('refreshToken', 'mockReshToken');
+
     cy.visit('/');
+  });
+
+  afterEach(() => {
+    cy.setCookie('accessToken', '');
+    window.localStorage.setItem('refreshToken', '');
+  });
+
+  it('моковые данные для ингредиентов', function () {
+    cy.wait(['@ingredients']);
   });
 
   describe('Тестирование работы модальных окон', () => {
@@ -14,37 +34,91 @@ describe('проверяем функциональность приложени
       ingredient.click();
     });
 
-    it('модальное окно ингредиента открывается', () => {
+    it('Открытие модального окна ингредиента', () => {
       cy.contains('Детали ингридиента').should('exist');
 
-      cy.get('li').children('p').contains('Калории, ккал').next('p').contains('4242');
+      cy.get('li')
+        .children('p')
+        .contains('Калории, ккал')
+        .next('p')
+        .contains('4242');
       cy.get('li').children('p').contains('Белки, г').next('p').contains('420');
       cy.get('li').children('p').contains('Жиры, г').next('p').contains('142');
-      cy.get('li').children('p').contains('Углеводы, г').next('p').contains('242');
+      cy.get('li')
+        .children('p')
+        .contains('Углеводы, г')
+        .next('p')
+        .contains('242');
     });
 
-    it('модальное окно ингредиента закрывается по клику на крестик', () => {
-      const closeButton = cy.get(`[data-cy="Детали ингридиента"]`);
-      closeButton.click();
+    it('Закрытие по клику на крестик', () => {
+      const closeX = cy.get(`[data-cy="Детали ингридиента"]`);
+      closeX.click();
 
       cy.contains('Детали ингридиента').should('not.exist');
     });
 
-    it('модальное окно ингредиента закрывается по клику на оверлей', () => {
+    it('Закрытие по клику на оверлей', () => {
       cy.contains('Детали ингридиента').should('exist');
 
       cy.get('body').type('{esc}');
 
       cy.contains('Детали ингридиента').should('not.exist');
-      
     });
   });
 
+  describe('Добавление ингредиентов из списка в конструктор', () => {
+    it('Булка добавляется в конструктор', () => {
+      const buns = cy.get('h3').contains('Булки').next('ul');
+      const bunsAddButton = buns.contains('Добавить');
 
+      cy.get('div').contains('Выберите булки').should('exist');
 
+      bunsAddButton.click();
 
+      cy.get('div').contains('Выберите булки').should('not.exist');
+    });
+    it('Ингредиент добавляется в конструктор', () => {
+      const mains = cy.get('h3').contains('Начинки').next('ul');
+      const mainsAddButton = mains.contains('Добавить');
 
+      cy.get('div').contains('Выберите начинку').should('exist');
 
+      mainsAddButton.click();
 
+      cy.get('div').contains('Выберите начинку').should('not.exist');
+    });
+  });
 
+  describe('Оформление заказа', () => {
+    it('Проверка пользователя с моковыми данными', () => {
+      cy.contains('Akmaikin Nikita').should('exist');
+    });
+
+    it('Клик по кнопке «Оформить заказ»', () => {
+      // моковые данные ответа на запрос создания заказа
+      cy.intercept('POST', 'api/orders', {
+        fixture: 'post_order.json'
+      }).as(`${'order'}`);
+
+      const buns = cy.get('h3').contains('Булки').next('ul');
+      const bunsAddButton = buns.contains('Добавить');
+      bunsAddButton.click();
+
+      const mains = cy.get('h3').contains('Начинки').next('ul');
+      const mainsAddButton = mains.contains('Добавить');
+      mainsAddButton.click();
+
+      const orderRequestButton = cy.contains('Оформить заказ');
+      orderRequestButton.click();
+
+      cy.contains('1');
+
+      cy.get('body').type('{esc}');
+
+      cy.contains('36112').should('not.exist');
+      cy.contains('Выберите булки').should('exist');
+      cy.contains('Выберите начинку').should('exist');
+    });
+  });
 });
