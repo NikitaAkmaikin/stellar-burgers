@@ -5,7 +5,7 @@ import {
   updateUserApi,
   logoutApi,
   getUserApi
-} from '@api';
+} from '../../utils/burger-api';
 import { TUser } from '@utils-types';
 
 export const login = createAsyncThunk('user/login', loginUserApi);
@@ -20,7 +20,7 @@ type TUserState = {
   error: string | null;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuthChecked: false,
   user: {
     email: '',
@@ -42,29 +42,30 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
-        state.error = '';
+        state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
-        state.error = action.error.message!;
+        state.error = action.error?.message || null;
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isAuthChecked = true;
-        state.error = '';
+        state.error = null;
         state.user = action.payload.user;
       });
     builder
       .addCase(getApiUser.rejected, (state, action) => {
         state.isAuthChecked = false;
-        console.log(action.error.message);
+        state.error = action.error?.message || null;
       })
       .addCase(getApiUser.fulfilled, (state, action) => {
         state.isAuthChecked = true;
         state.user = action.payload.user;
+        state.error = null;
       });
     builder
       .addCase(login.pending, (state) => {
         state.isAuthChecked = false;
-        state.error = '';
+        state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
         state.isAuthChecked = false;
@@ -72,13 +73,13 @@ const userSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isAuthChecked = true;
-        state.error = '';
+        state.error = null;
         state.user = action.payload.user;
       });
     builder.addCase(logout.fulfilled, (state) => (state = initialState));
     builder
       .addCase(updateUser.pending, (state) => {
-        state.error = '';
+        state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.isAuthChecked = false;
@@ -87,6 +88,7 @@ const userSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.isAuthChecked = true;
         state.user = action.payload.user;
+        state.error = null;
       });
   }
 });
