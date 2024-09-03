@@ -2,17 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { TConstructorIngredient } from '../../utils/types';
 
 type TBurgerState = {
-  constructorItems: {
-    bun: TConstructorIngredient | null;
-    ingredients: TConstructorIngredient[];
-  };
+  bun: TConstructorIngredient | null;
+  ingredients: TConstructorIngredient[];
 };
 
-const initialState: TBurgerState = {
-  constructorItems: {
-    bun: null,
-    ingredients: []
-  }
+export const initialState: TBurgerState = {
+  bun: null,
+  ingredients: []
 };
 
 const burgerSlice = createSlice({
@@ -21,29 +17,26 @@ const burgerSlice = createSlice({
   reducers: {
     addBurger: (state, action) => {
       if (action.payload.type === 'bun') {
-        state.constructorItems.bun = action.payload;
+        state.bun = action.payload;
       } else {
-        state.constructorItems.ingredients.push({ ...action.payload });
+        state.ingredients.push({ ...action.payload });
       }
     },
     removeBurger: (state, action) => {
       const { index } = action.payload;
-      state.constructorItems.ingredients.splice(index, 1);
+      state.ingredients.splice(index, 1);
 
       // Вторая реализация удаления
-      // state.constructorItems.ingredients =
-      //   state.constructorItems.ingredients.filter(
+      // state.ingredients =
+      //   state.ingredients.filter(
       //     (el) => el.id !== action.payload
       //   );
     },
     handleBurgerPosition: (state, action) => {
       const { index, step } = action.payload;
-      [
-        state.constructorItems.ingredients[index],
-        state.constructorItems.ingredients[index + step]
-      ] = [
-        state.constructorItems.ingredients[index + step],
-        state.constructorItems.ingredients[index]
+      [state.ingredients[index], state.ingredients[index + step]] = [
+        state.ingredients[index + step],
+        state.ingredients[index]
       ];
     },
     clearBurger: (state) => (state = initialState)

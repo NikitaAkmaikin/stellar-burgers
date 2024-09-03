@@ -1,7 +1,13 @@
 import '../../index.css';
 import styles from './app.module.css';
 import { ProtectedRoute } from '../protectedRoute/protectedRoute';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  useMatch
+} from 'react-router-dom';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import {
   ConstructorPage,
@@ -23,6 +29,10 @@ const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
+  const profileMatch = useMatch('/profile/orders/:number')?.params.number;
+  const feedMatch = useMatch('/feed/:number')?.params.number;
+  const orderNumber = profileMatch || feedMatch;
+
   useEffect(() => {
     dispatch(getApiIngredients());
     dispatch(getApiUser());
@@ -91,7 +101,10 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title={''} onClose={() => navigate(-1)}>
+              <Modal
+                title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+                onClose={() => navigate(-1)}
+              >
                 <OrderInfo />
               </Modal>
             }
@@ -107,7 +120,10 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title={''} onClose={() => navigate(-1)}>
+              <Modal
+                title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+                onClose={() => navigate(-1)}
+              >
                 <ProtectedRoute>
                   <OrderInfo />
                 </ProtectedRoute>
